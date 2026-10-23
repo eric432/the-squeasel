@@ -15,9 +15,11 @@ interface MascotProps {
   phase: MascotPhase;
   weightMb: number;
   line: string;
+  /** No breathing or squeeze motion — for About and other still uses. */
+  staticPose?: boolean;
 }
 
-export function Mascot({ phase, weightMb, line }: MascotProps) {
+export function Mascot({ phase, weightMb, line, staticPose = false }: MascotProps) {
   const fullness = weightMb > 0 ? Math.min(1, Math.max(0, Math.log10(weightMb) / Math.log10(150))) : 0;
   const sx = 0.62 + 0.46 * fullness;
   const sy = 1.04 - 0.04 * fullness;
@@ -26,9 +28,9 @@ export function Mascot({ phase, weightMb, line }: MascotProps) {
     phase === "squeezing" ? "M102 106 Q110 100 118 106" : phase === "skinny" ? "M98 101 Q110 112 122 101" : "M101 103 Q110 108 119 103";
 
   return (
-    <div className="mascot">
+    <div className={staticPose ? "mascot is-static" : "mascot"}>
       <svg className="mascot-svg" viewBox="0 0 220 240" width="150" height="164" role="img" aria-label="The Squeasel mascot" style={style}>
-        <g className="w-breathe">
+        <g className={staticPose ? undefined : "w-breathe"}>
           <g className={`w-tail ${phase}`}>
             <path d="M140 206 C188 214 214 168 198 120" fill="none" stroke="#8b6744" strokeWidth="20" strokeLinecap="round" />
             <path d="M196 132 C202 126 204 120 198 113" fill="none" stroke="#3a2a1c" strokeWidth="17" strokeLinecap="round" />

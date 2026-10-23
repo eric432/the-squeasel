@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { isTauri } from "@tauri-apps/api/core";
 import { getCurrentWebview } from "@tauri-apps/api/webview";
+import { AboutPanel } from "./components/AboutPanel";
 import { BatchOptionsPanel } from "./components/BatchOptionsPanel";
 import { BottomBar } from "./components/BottomBar";
 import { EditorPanel } from "./components/EditorPanel";
@@ -72,6 +73,7 @@ export default function App() {
   } | null>(null);
   const [batchNote, setBatchNote] = useState<string | null>(null);
   const [batchOpen, setBatchOpen] = useState(false);
+  const [aboutOpen, setAboutOpen] = useState(false);
   const [runOutput, setRunOutput] = useState<RunOutput | null>(null);
   const [patternError, setPatternError] = useState<string | null>(null);
   const [report, setReport] = useState<RunReport | null>(null);
@@ -385,6 +387,7 @@ export default function App() {
     };
     setCustomizeId(null);
     setBatchOpen(false);
+    setAboutOpen(false);
     setShowResults(false);
     setRerunCropId(null);
     setBatchNote(null);
@@ -558,6 +561,7 @@ export default function App() {
     recipe.name = uniqueName("Untitled recipe", base.recipes);
     setCustomizeId(null);
     setBatchOpen(false);
+    setAboutOpen(false);
     setRecipeError(null);
     setDraftIsNew(true);
     setDraft(recipe);
@@ -571,6 +575,7 @@ export default function App() {
     recipe.name = uniqueName(copy.name, base.recipes);
     setCustomizeId(null);
     setBatchOpen(false);
+    setAboutOpen(false);
     setRecipeError(null);
     setDraftIsNew(true);
     setDraft(recipe);
@@ -695,6 +700,7 @@ export default function App() {
     if (current.id === NO_RECIPE_ID) return;
     setCustomizeId(null);
     setBatchOpen(false);
+    setAboutOpen(false);
     setRecipeError(null);
     setDraftIsNew(false);
     setDraft(cloneRecipe(current));
@@ -733,7 +739,10 @@ export default function App() {
       };
   const activeOutput = runOutput ?? runOutputFromRecipe(savedRecipe);
   const optionsChanged = runOutput !== null && runOutputChanged(savedRecipe, activeOutput);
-  const showBatchPanel = batchOpen && !editingRecipe && openImage === null && batchRun === null && !showResults;
+  const showBatchPanel =
+    batchOpen && !aboutOpen && !editingRecipe && openImage === null && batchRun === null && !showResults;
+  const showAboutPanel =
+    aboutOpen && !editingRecipe && openImage === null && batchRun === null && !showResults;
 
   return (
     <div className={dragOver ? "app is-drag-over" : "app"}>
@@ -765,6 +774,11 @@ export default function App() {
           mascotPhase={mascot.phase}
           mascotWeightMb={mascot.weightMb}
           mascotLine={mascot.line}
+          aboutOpen={showAboutPanel}
+          onAbout={() => {
+            setBatchOpen(false);
+            setAboutOpen((open) => !open);
+          }}
           onSelect={(id) => {
             if (draft?.id === id || (!draft && id === library.selectedId)) return;
             request((base) => persist({ ...base, selectedId: id }));
@@ -938,6 +952,7 @@ export default function App() {
           </>
         )}
       </div>
+      {showAboutPanel ? <AboutPanel onClose={() => setAboutOpen(false)} /> : null}
       {showBatchPanel ? (
         <BatchOptionsPanel
           recipe={savedRecipe}
@@ -1022,6 +1037,7 @@ export default function App() {
           optionsDisabled={editingRecipe || batchRun !== null}
           onOptions={() => {
             if (editingRecipe || batchRun) return;
+            setAboutOpen(false);
             setBatchOpen((open) => !open);
           }}
           onSqueeze={squeezeAll}

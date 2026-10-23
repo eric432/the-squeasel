@@ -221,6 +221,7 @@ export async function installTauri(page: Page): Promise<void> {
           });
           return Promise.resolve(null);
         }
+        if (cmd === "plugin:app|version") return Promise.resolve("0.1.0");
         if (cmd === "close_preview" || cmd === "cancel_image" || cmd === "cancel_ingest" || cmd === "reveal_in_finder") {
           return Promise.resolve(null);
         }

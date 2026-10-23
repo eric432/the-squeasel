@@ -6,6 +6,19 @@
   align-self: center;
 }
 
+.mascot.is-static .w-breathe,
+.mascot.is-static .w-tail,
+.mascot.is-static .w-arm,
+.mascot.is-static .w-foot,
+.mascot.is-static .w-head,
+.mascot.is-static .w-body,
+.mascot.is-static .w-collar,
+.mascot.is-static .w-px,
+.mascot.is-static .w-pad {
+  animation: none !important;
+  transition: none !important;
+}
+
 .mascot-svg {
   display: block;
   width: 150px;

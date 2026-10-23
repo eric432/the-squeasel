@@ -17,6 +17,8 @@ interface SidebarProps {
   mascotPhase: MascotPhase;
   mascotWeightMb: number;
   mascotLine: string;
+  aboutOpen?: boolean;
+  onAbout: () => void;
   onSelect: (id: string) => void;
   onNew: () => void;
   onEdit: () => void;
@@ -40,6 +42,8 @@ export function Sidebar({
   mascotPhase,
   mascotWeightMb,
   mascotLine,
+  aboutOpen = false,
+  onAbout,
   onSelect,
   onNew,
   onEdit,
@@ -145,7 +149,18 @@ export function Sidebar({
       ) : null}
       <Mascot phase={mascotPhase} weightMb={mascotWeightMb} line={mascotLine} />
       <p className="sidebar-note">Originals are never changed. Exports follow the recipe’s output folder.</p>
-      <p className="sidebar-credit">A Down To Earth app by Bitclone. No cloud, no account.</p>
+      <p className="sidebar-credit">
+        <span>A Down To Earth app by Bitclone. No cloud, no account.</span>
+        <button
+          type="button"
+          className="text-button about-link"
+          aria-pressed={aboutOpen}
+          aria-controls="about-panel"
+          onClick={onAbout}
+        >
+          About
+        </button>
+      </p>
     </aside>
   );
 }

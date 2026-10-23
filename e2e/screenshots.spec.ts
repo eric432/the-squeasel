@@ -43,6 +43,14 @@ for (const scheme of ["light", "dark"] as const) {
     await expect(page).toHaveScreenshot(`batch-options-${scheme}.png`);
   });
 
+  test(`about ${scheme}`, async ({ page }) => {
+    await openApp(page, scheme);
+    await page.getByRole("button", { name: "About" }).click();
+    await expect(page.getByRole("region", { name: "About" })).toBeVisible();
+    await expect(page.getByText("Version 0.1.0")).toBeVisible();
+    await expect(page).toHaveScreenshot(`about-${scheme}.png`);
+  });
+
   test(`results ${scheme}`, async ({ page }) => {
     await openApp(page, scheme);
     await addImages(page);
