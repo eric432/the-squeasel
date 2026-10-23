@@ -1,0 +1,52 @@
+[package]
+name = "squeasel"
+version = "0.1.0"
+description = "The Squeasel, a local image tool from Bitclone"
+authors = ["Bitclone"]
+edition = "2024"
+
+[lib]
+name = "squeasel_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+base64 = "0.22"
+# 5.6.0 is yanked. Stay on 5.x; version 6 changes the resize API.
+fast_image_resize = { version = "=5.5.0", default-features = false, features = ["image"] }
+image = { version = "0.25.10", default-features = false, features = ["jpeg", "png", "gif", "tiff", "webp"] }
+mozjpeg = "=0.10.13"
+oxipng = "=10.2.1"
+# GPL-3.0-or-later. Lossy PNG only, and only when the checkbox is on.
+imagequant = "=4.4.1"
+little_exif = "=0.6.23"
+moxcms = "=0.9.1"
+png = "0.17"
+rayon = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2.8.3"
+webp = "0.3"
+
+[dev-dependencies]
+image = { version = "0.25.10", default-features = false, features = ["jpeg", "png", "gif", "tiff", "webp"] }
+little_exif = "=0.6.23"
+
+# Our crate stays lightly optimized so dev builds are still debuggable.
+# Dependencies (especially `image`) run at full speed: opt-level 0 made a
+# 6000×4000 thumbnail take several seconds.
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 3
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = 3
+panic = "abort"
+strip = true
