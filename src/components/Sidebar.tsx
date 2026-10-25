@@ -15,7 +15,6 @@ interface SidebarProps {
   editing?: boolean;
   busy?: boolean;
   mascotPhase: MascotPhase;
-  mascotWeightMb: number;
   mascotLine: string;
   aboutOpen?: boolean;
   onAbout: () => void;
@@ -40,7 +39,6 @@ export function Sidebar({
   editing = false,
   busy = false,
   mascotPhase,
-  mascotWeightMb,
   mascotLine,
   aboutOpen = false,
   onAbout,
@@ -81,7 +79,11 @@ export function Sidebar({
         if (list.scrollTop !== 0) list.scrollTop = 0;
         return;
       }
-      if (target.bottom > listRect.bottom + 1) list.scrollTop += target.bottom - listRect.bottom + 4;
+      // Leave air above the mascot so Edit recipe isn't tight against his ears.
+      const clearance = 12;
+      if (target.bottom > listRect.bottom - clearance + 1) {
+        list.scrollTop += target.bottom - (listRect.bottom - clearance) + 4;
+      }
     };
     list.scrollTop = 0;
     reveal();
@@ -147,7 +149,7 @@ export function Sidebar({
           {error}
         </p>
       ) : null}
-      <Mascot phase={mascotPhase} weightMb={mascotWeightMb} line={mascotLine} />
+      <Mascot phase={mascotPhase} line={mascotLine} />
       <p className="sidebar-note">Originals are never changed. Exports follow the recipe’s output folder.</p>
       <p className="sidebar-credit">
         <span>A Down To Earth app by Bitclone. No cloud, no account.</span>

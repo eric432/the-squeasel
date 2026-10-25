@@ -772,7 +772,6 @@ export default function App() {
           editing={editingRecipe}
           busy={batchRun !== null}
           mascotPhase={mascot.phase}
-          mascotWeightMb={mascot.weightMb}
           mascotLine={mascot.line}
           aboutOpen={showAboutPanel}
           onAbout={() => {

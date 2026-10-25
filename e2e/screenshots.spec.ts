@@ -63,8 +63,8 @@ for (const scheme of ["light", "dark"] as const) {
 
 async function settled(page: import("@playwright/test").Page, phase: "fat" | "skinny"): Promise<void> {
   await page.waitForFunction((expected) => {
-    const bubble = document.querySelector(".w-bubble");
-    const body = document.querySelector(".w-body");
-    return Boolean(bubble?.classList.contains("is-empty") && body?.classList.contains(expected));
+    const root = document.querySelector(".sq-mascot:not(.is-static)");
+    const bubble = root?.querySelector(".sq-bubble");
+    return Boolean(root?.getAttribute("data-phase") === expected && bubble?.hasAttribute("hidden"));
   }, phase);
 }

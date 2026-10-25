@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-export type MascotPhase = "fat" | "squeezing" | "skinny";
+export type MascotPhase = "fat" | "squeezing" | "skinny" | "refilling";
 
 const LINES = [
   "I've been working out!",
@@ -17,6 +17,9 @@ const LINES = [
   "Do I look faster?",
 ];
 
+/** Timings from docs/mascot-2/squeasel-mascot.js */
+const T = { bubbleIn: 720, skinny: 1100, bubbleOut: 3800, refill: 850 };
+
 function nextLine(previous: string): string {
   const choices = LINES.filter((line) => line !== previous);
   const index = Math.floor(Math.random() * choices.length);
@@ -28,9 +31,11 @@ export function useMascot(imageCount: number, weightMb: number) {
   const [line, setLine] = useState("");
   const timers = useRef<number[]>([]);
   const lastLine = useRef("");
+  const phaseRef = useRef(phase);
   const countRef = useRef(imageCount);
   const weightRef = useRef(weightMb);
   const held = useRef<{ count: number; weightMb: number } | null>(null);
+  phaseRef.current = phase;
   countRef.current = imageCount;
   weightRef.current = weightMb;
 
@@ -40,6 +45,14 @@ export function useMascot(imageCount: number, weightMb: number) {
   }, []);
 
   useEffect(() => () => clearTimers(), [clearTimers]);
+
+  const refill = useCallback(() => {
+    if (phaseRef.current !== "skinny") return;
+    clearTimers();
+    setLine("");
+    setPhase("refilling");
+    timers.current.push(window.setTimeout(() => setPhase("fat"), T.refill));
+  }, [clearTimers]);
 
   useEffect(() => {
     if (imageCount <= 0) {
@@ -54,20 +67,27 @@ export function useMascot(imageCount: number, weightMb: number) {
     clearTimers();
     held.current = null;
     setLine("");
-    setPhase("fat");
+    if (phaseRef.current === "skinny") {
+      setPhase("refilling");
+      timers.current.push(window.setTimeout(() => setPhase("fat"), T.refill));
+    } else {
+      setPhase("fat");
+    }
   }, [imageCount, weightMb, clearTimers]);
 
   const squeeze = useCallback(() => {
+    // Allow interrupting a refill so a Squeeze that lands mid-puff still runs.
+    if (phaseRef.current !== "fat" && phaseRef.current !== "refilling") return;
     clearTimers();
     held.current = { count: countRef.current, weightMb: weightRef.current };
     const spoken = nextLine(lastLine.current);
     lastLine.current = spoken;
     setLine("");
     setPhase("squeezing");
-    timers.current.push(window.setTimeout(() => setLine(spoken), 620));
-    timers.current.push(window.setTimeout(() => setLine(""), 620 + 3600));
-    timers.current.push(window.setTimeout(() => setPhase("skinny"), 950));
+    timers.current.push(window.setTimeout(() => setLine(spoken), T.bubbleIn));
+    timers.current.push(window.setTimeout(() => setPhase("skinny"), T.skinny));
+    timers.current.push(window.setTimeout(() => setLine(""), T.bubbleOut));
   }, [clearTimers]);
 
-  return { phase, line, weightMb, squeeze };
+  return { phase, line, weightMb, squeeze, refill };
 }

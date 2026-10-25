@@ -41,7 +41,7 @@ export function AboutPanel({ onClose }: { onClose: () => void }) {
     <section className="batch-panel about-panel" id="about-panel" aria-label="About">
       <div className="about-panel-body">
         <div className="about-hero">
-          <Mascot phase="skinny" weightMb={0} line="" staticPose />
+          <Mascot phase="skinny" line="" size={96} staticPose />
           <div className="about-title-block">
             <h2>The Squeasel</h2>
             <p className="hint">{`Version ${version}`}</p>

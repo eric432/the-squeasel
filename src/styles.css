@@ -286,6 +286,8 @@ input:disabled {
   min-height: 0;
   overflow-x: hidden;
   overflow-y: auto;
+  /* Room to scroll Edit recipe clear of the mascot below. */
+  padding-bottom: 12px;
   scrollbar-width: thin;
   scrollbar-color: var(--border-strong) transparent;
 }
@@ -1548,14 +1550,8 @@ input:disabled {
   gap: 16px;
 }
 
-.about-hero .mascot {
-  width: 96px;
-  height: 105px;
-}
-
-.about-hero .mascot-svg {
-  width: 96px;
-  height: 105px;
+.about-hero .sq-mascot {
+  flex-shrink: 0;
 }
 
 .about-title-block {
