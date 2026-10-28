@@ -39,6 +39,13 @@ export function RecipeSummary({ recipe, builtIn }: { recipe: Recipe; builtIn: bo
   );
 }
 
+function sizeWords(width: number | null, height: number | null): string {
+  if (width !== null && height !== null) return `${width}×${height}`;
+  if (width !== null) return `${width} wide, height auto`;
+  if (height !== null) return `height ${height}, width auto`;
+  return "empty×empty";
+}
+
 function recipeFacts(recipe: Recipe): { label: string; value: string }[] {
   const resize = recipe.resize;
   const folder =
@@ -48,7 +55,7 @@ function recipeFacts(recipe: Recipe): { label: string; value: string }[] {
   return [
     {
       label: "Size",
-      value: resize.noResize ? "No resizing" : `${resize.width ?? "empty"}×${resize.height ?? "empty"} · ${resize.mode}`,
+      value: resize.noResize ? "No resizing" : `${sizeWords(resize.width, resize.height)} · ${resize.mode}`,
     },
     { label: "Never upscale", value: resize.neverUpscale ? "on" : "off" },
     { label: "Retina", value: resize.retina2x ? "on" : "off" },

@@ -6,6 +6,7 @@ import licensesText from "../../THIRD-PARTY-LICENSES.md?raw";
 import { Mascot } from "./Mascot";
 
 const SOURCE = "github.com/eric432/the-squeasel";
+const KOFI = "ko-fi.com/ericbaldoni";
 
 export function AboutPanel({ onClose }: { onClose: () => void }) {
   const [version, setVersion] = useState(packageJson.version);
@@ -65,6 +66,10 @@ export function AboutPanel({ onClose }: { onClose: () => void }) {
             {copied ? "Copied" : "Copy"}
           </button>
         </div>
+        <p className="about-line">
+          Free and open source. If it saves you time, support it on Ko-fi.{" "}
+          <span className="about-source-url">{KOFI}</span>
+        </p>
         <p className="about-line">Made by Bitclone, Tucson, Arizona. www.bitclone.com</p>
         <details className="about-licenses">
           <summary>Third-party licenses</summary>

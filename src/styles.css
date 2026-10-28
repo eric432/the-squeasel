@@ -26,6 +26,11 @@ input {
   color: inherit;
 }
 
+input::placeholder {
+  color: var(--text-muted);
+  opacity: 1;
+}
+
 button {
   cursor: pointer;
 }

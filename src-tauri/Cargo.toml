@@ -1,6 +1,6 @@
 [package]
 name = "squeasel"
-version = "1.0.0"
+version = "1.0.1"
 description = "The Squeasel, a local image tool from Bitclone"
 authors = ["Bitclone"]
 edition = "2024"

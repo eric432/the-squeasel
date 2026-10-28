@@ -176,6 +176,7 @@ export function EditorPanel({
             aria-label="Width"
             disabled={noResize}
             value={recipe.resize.width ?? ""}
+            placeholder={recipe.resize.mode === "scale" && recipe.resize.width == null ? "auto" : undefined}
             onChange={(event) => {
               const width = parsePixels(event.target.value);
               if (width !== undefined) resize({ width });
@@ -193,6 +194,7 @@ export function EditorPanel({
             aria-label="Height"
             disabled={noResize}
             value={recipe.resize.height ?? ""}
+            placeholder={recipe.resize.mode === "scale" && recipe.resize.height == null ? "auto" : undefined}
             onChange={(event) => {
               const height = parsePixels(event.target.value);
               if (height !== undefined) resize({ height });

@@ -368,6 +368,15 @@ export function ThisImageOnly({
               min={1}
               aria-label="Width"
               value={shown.width ?? ""}
+              placeholder={scaleEmptyPlaceholder(
+                shown.mode,
+                "width",
+                shown.width,
+                shown.height,
+                pixelSize?.width,
+                pixelSize?.height,
+                shown.neverUpscale,
+              )}
               onChange={(event) => {
                 const width = parsePixels(event.target.value);
                 if (width !== undefined) change({ width });
@@ -384,6 +393,15 @@ export function ThisImageOnly({
               min={1}
               aria-label="Height"
               value={shown.height ?? ""}
+              placeholder={scaleEmptyPlaceholder(
+                shown.mode,
+                "height",
+                shown.width,
+                shown.height,
+                pixelSize?.width,
+                pixelSize?.height,
+                shown.neverUpscale,
+              )}
               onChange={(event) => {
                 const height = parsePixels(event.target.value);
                 if (height !== undefined) change({ height });
@@ -541,6 +559,29 @@ function parsePixels(value: string): number | null | undefined {
   const parsed = Number(trimmed);
   if (!Number.isInteger(parsed) || parsed <= 0) return undefined;
   return parsed;
+}
+
+/** Grey hint for the empty Scale axis. Not written into the override. */
+function scaleEmptyPlaceholder(
+  mode: FitMode,
+  empty: "width" | "height",
+  width: number | null,
+  height: number | null,
+  imageWidth: number | undefined,
+  imageHeight: number | undefined,
+  neverUpscale: boolean,
+): string | undefined {
+  if (mode !== "scale" || imageWidth === undefined || imageHeight === undefined || imageWidth <= 0 || imageHeight <= 0) {
+    return undefined;
+  }
+  if (empty === "height") {
+    if (width === null || height !== null) return undefined;
+    if (neverUpscale && width > imageWidth) return String(imageHeight);
+    return String(Math.round((width * imageHeight) / imageWidth));
+  }
+  if (height === null || width !== null) return undefined;
+  if (neverUpscale && height > imageHeight) return String(imageWidth);
+  return String(Math.round((height * imageWidth) / imageHeight));
 }
 
 function parseKb(value: string): number | null {
