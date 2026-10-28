@@ -835,22 +835,6 @@ input:disabled {
   border-top: 1px solid var(--border);
 }
 
-.about-link {
-  flex-shrink: 0;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--accent-text);
-  font-size: inherit;
-  font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.about-link[aria-pressed="true"] {
-  color: var(--text);
-}
-
 .stage {
   flex: 1;
   min-width: 0;
@@ -1537,8 +1521,33 @@ input:disabled {
   justify-content: flex-end;
 }
 
-.about-panel {
-  max-height: 48vh;
+.about-dialog {
+  position: relative;
+  width: min(480px, 100%);
+  max-height: min(80vh, 640px);
+  overflow: hidden;
+  gap: 16px;
+}
+
+.about-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 22px;
+  line-height: 1;
+}
+
+.about-close:hover {
+  background: var(--bg-thumb);
+  color: var(--text);
 }
 
 .about-panel-body {
@@ -1547,6 +1556,13 @@ input:disabled {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  padding-right: 28px;
+}
+
+.about-dialog-done {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .about-hero {

@@ -46,7 +46,7 @@ for (const scheme of ["light", "dark"] as const) {
   test(`about ${scheme}`, async ({ page }) => {
     await openApp(page, scheme);
     await page.getByRole("button", { name: "About" }).click();
-    await expect(page.getByRole("region", { name: "About" })).toBeVisible();
+    await expect(page.getByRole("dialog", { name: "The Squeasel" })).toBeVisible();
     await expect(page.getByText("Version 0.1.0")).toBeVisible();
     await expect(page).toHaveScreenshot(`about-${scheme}.png`);
   });

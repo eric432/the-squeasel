@@ -150,12 +150,11 @@ export function Sidebar({
         </p>
       ) : null}
       <Mascot phase={mascotPhase} line={mascotLine} />
-      <p className="sidebar-note">Originals are never changed. Exports follow the recipe’s output folder.</p>
+      <p className="sidebar-note">Originals are never changed.</p>
       <p className="sidebar-credit">
-        <span>A Down To Earth app by Bitclone. No cloud, no account.</span>
         <button
           type="button"
-          className="text-button about-link"
+          className="text-button"
           aria-pressed={aboutOpen}
           aria-controls="about-panel"
           onClick={onAbout}
